@@ -1,0 +1,10 @@
+{
+  "name": "react-trpc",
+  "version": "0.0.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "license": "MIT",
+  "devDependencies": {
+    "api": "*"
+  }
+}

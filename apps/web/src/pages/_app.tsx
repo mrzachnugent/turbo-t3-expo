@@ -1,8 +1,7 @@
-// src/pages/_app.tsx
 import { withTRPC } from '@trpc/next';
 import type { AppRouter } from 'api';
 import type { AppType } from 'next/dist/shared/lib/utils';
-import superjson from 'superjson';
+import { transformer } from '../utils/trpc';
 import { SessionProvider } from 'next-auth/react';
 import '../styles/globals.css';
 
@@ -37,7 +36,7 @@ export default withTRPC<AppRouter>({
 
     return {
       url,
-      transformer: superjson,
+      transformer,
       /**
        * @link https://react-query.tanstack.com/reference/QueryClient
        */

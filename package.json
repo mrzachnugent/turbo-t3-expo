@@ -2,40 +2,10 @@
   "name": "monolith",
   "version": "0.0.0",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "apps/*",
-      "packages/*"
-    ],
-    "nohoist": [
-      "**/@trpc/**/*",
-      "**/@trpc/**/*",
-      "**/react-query",
-      "**/react-native",
-      "**/react-native/**",
-      "**/@react-native-*",
-      "**/@react-native-*/**",
-      "**/react-native-*",
-      "**/react-native-*/**",
-      "**/*react-navigation/**",
-      "**/expo",
-      "**/expo/**",
-      "**/@expo",
-      "**/@expo/**",
-      "**/expo-*",
-      "**/expo-*/**",
-      "**/metro-*",
-      "**/metro-*/**",
-      "**/react",
-      "**/react/**",
-      "**/react-dom",
-      "**/react-dom/**",
-      "**/@types/react",
-      "**/@types/react/**",
-      "**/@types/react-dom",
-      "**/@types/react-dom/**"
-    ]
-  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
@@ -52,6 +22,10 @@
     "npm": ">=7.0.0",
     "node": ">=14.0.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@prisma/client": "^4.0.0",
+    "expo-yarn-workspaces": "^2.0.0",
+    "prisma": "^4.0.0"
+  },
   "packageManager": "yarn@1.22.18"
 }
