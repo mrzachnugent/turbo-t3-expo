@@ -1,6 +1,6 @@
 import { type NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
 
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
@@ -11,23 +11,29 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_ID!,
-      clientSecret: process.env.GITHUB_SECRET!,
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
     }),
-    // ...add more providers here
-    CredentialsProvider({
-      name: 'Credentials',
-      credentials: {
-        name: {
-          label: 'Name',
-          type: 'text',
-          placeholder: 'Enter your name',
-        },
-      },
-      async authorize(credentials, _req) {
-        const user = { id: 1, name: credentials?.name ?? 'J Smith' };
-        return user;
-      },
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+  callbacks: {
+    jwt: async ({ user, token }) => {
+      if (user) {
+        token.uid = user.id;
+      }
+      return token;
+    },
+    session: async ({ session, token }) => {
+      if (session?.user && typeof token.uid === 'string') {
+        session.user.id = token.uid;
+      }
+      return session;
+    },
+  },
+  session: {
+    strategy: 'jwt',
+  },
 };

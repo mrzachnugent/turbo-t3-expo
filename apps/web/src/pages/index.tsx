@@ -2,9 +2,11 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { trpc } from '../utils/trpc';
 import { Button } from 'ui-web';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 const Home: NextPage = () => {
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
+  const session = useSession();
 
   return (
     <>
@@ -19,6 +21,13 @@ const Home: NextPage = () => {
           Create <span className='text-purple-300'>T3</span> App
         </h2>
         <Button />
+        {session.data ? (
+          <button onClick={() => signOut()}>
+            Hey {session.data?.user?.name}, Sign Out?
+          </button>
+        ) : (
+          <button onClick={() => signIn()}>Sign in</button>
+        )}
         <p className='text-2xl text-gray-700'>This stack uses</p>
         <div className='grid grid-cols-1 grid-rows-3 lg:grid-rows-2 md:grid-rows-2 justify-center items-center lg:grid-cols-2 md:grid-cols-2 gap-3 mt-3 pt-3 w-full lg:w-2/3 md:w-full'>
           <div className='hover:scale-105 cursor-pointer duration-500 flex flex-col justify-center items-center text-center rounded shadow-xl border-2 border-gray-500 h-full w-full p-6'>
