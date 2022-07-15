@@ -1964,7 +1964,7 @@
   dependencies:
     tslib "^2.4.0"
 
-"@trpc/client@^9.25.3":
+"@trpc/client@^9.25.3", "@trpc/client@^9.26.0":
   version "9.26.0"
   resolved "https://registry.yarnpkg.com/@trpc/client/-/client-9.26.0.tgz#d50a84f2b6a912d3039b52a08d16fde10f4de63c"
   integrity sha512-zkKXkqZIKseXqybBU8U4odcGCTtDBG/Gu04mfMJ8UyzpG12uzZ5xRkbuufRChgx1oA27/mi3aW/8h6mI34cxyA==
@@ -1979,14 +1979,14 @@
     "@babel/runtime" "^7.9.0"
     react-ssr-prepass "^1.5.0"
 
-"@trpc/react@^9.25.3":
+"@trpc/react@^9.25.3", "@trpc/react@^9.26.0":
   version "9.26.0"
   resolved "https://registry.yarnpkg.com/@trpc/react/-/react-9.26.0.tgz#3dff7a1fe2f0edce56ad4f5f9ebad2fc87d2d11a"
   integrity sha512-1JcfRpRMH2KFvJlm9cXD+RMFe7HtxmKn3HiSY1AVQiRMA7yxxmMnRWvezbnMvQ1LzvmfnlTwC46z6c3+u/MWvA==
   dependencies:
     "@babel/runtime" "^7.9.0"
 
-"@trpc/server@^9.25.3":
+"@trpc/server@^9.25.3", "@trpc/server@^9.26.0":
   version "9.26.0"
   resolved "https://registry.yarnpkg.com/@trpc/server/-/server-9.26.0.tgz#dcd330c0f337bcf18a60dfb8c82a764f4b8ddfc9"
   integrity sha512-aQgGkcAln9leq/Ab5X5AOWci0BNiy4oGcEqXCWs5Q7sZ1gd5Y3OzQV5tnY6fPsWSRjuvkb45Syq2AkFpX0q0/w==

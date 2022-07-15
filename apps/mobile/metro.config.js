@@ -15,4 +15,6 @@ config.resolver.nodeModulesPaths = [
   path.resolve(workspaceRoot, 'node_modules'),
 ];
 
+config.resolver.sourceExts = ['jsx', 'js', 'ts', 'tsx', 'cjs'];
+
 module.exports = config;
