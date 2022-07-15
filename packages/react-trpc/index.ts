@@ -8,8 +8,8 @@ import superjson from 'superjson';
  * A set of strongly-typed React hooks from your `AppRouter` type signature with `createReactQueryHooks`.
  * @link https://trpc.io/docs/react#3-create-trpc-hooks
  */
-export const trpc = createReactQueryHooks<AppRouter>();
 
+export const trpc = createReactQueryHooks<AppRouter>();
 export const transformer = superjson;
 
 /**
@@ -31,3 +31,5 @@ export type inferMutationOutput<
 export type inferMutationInput<
   TRouteKey extends keyof AppRouter['_def']['mutations']
 > = inferProcedureInput<AppRouter['_def']['mutations'][TRouteKey]>;
+
+export type { AppRouter };

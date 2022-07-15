@@ -1,7 +1,6 @@
 import { withTRPC } from '@trpc/next';
-import type { AppRouter } from 'api';
 import type { AppType } from 'next/dist/shared/lib/utils';
-import { transformer } from '../utils/trpc';
+import { transformer, AppRouter } from '../utils/trpc';
 import { SessionProvider } from 'next-auth/react';
 import '../styles/globals.css';
 

@@ -5,6 +5,7 @@
   "types": "./index.ts",
   "license": "MIT",
   "devDependencies": {
-    "api": "*"
+    "api": "*",
+    "tsconfig": "*"
   }
 }
