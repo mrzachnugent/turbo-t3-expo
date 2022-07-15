@@ -2,16 +2,23 @@
   "name": "monolith",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/@types/react/**/*",
+      "**/@types/react-native/**/*"
+    ]
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "clean": "scripts/clean.sh"
+    "clean": "scripts/clean.sh",
+    "postinstall": "prisma generate"
   },
   "devDependencies": {
     "eslint-config-custom": "*",
@@ -24,7 +31,6 @@
   },
   "dependencies": {
     "@prisma/client": "^4.0.0",
-    "expo-yarn-workspaces": "^2.0.0",
     "prisma": "^4.0.0"
   },
   "packageManager": "yarn@1.22.18"
