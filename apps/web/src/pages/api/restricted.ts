@@ -6,14 +6,14 @@ import { authOptions as nextAuthOptions } from 'api';
 
 const restricted = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, nextAuthOptions);
-
+  
   if (session) {
-    res.send({
+    res.status(200).json({
       content:
         'This is protected content. You can access this content because you are signed in.',
     });
   } else {
-    res.send({
+    res.status(400).json({
       error: 'You must be sign in to view the protected content on this page.',
     });
   }

@@ -20,7 +20,6 @@ const Home: NextPage = () => {
         <h2 className='text-[3rem] lg:text-[5rem] md:text-[5rem] font-extrabold text-gray-700'>
           Create <span className='text-purple-300'>T3</span> App
         </h2>
-        <Button />
         {session.data ? (
           <button onClick={() => signOut()}>
             Hey {session.data?.user?.name}, Sign Out?
@@ -91,6 +90,7 @@ const Home: NextPage = () => {
         <div className='pt-6 text-2xl text-blue-500 flex justify-center items-center w-full'>
           {hello.data ? <p>{hello.data.greeting}</p> : <p>Loading..</p>}
         </div>
+        <Button />
       </div>
     </>
   );

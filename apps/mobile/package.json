@@ -16,6 +16,7 @@
     "api": "*",
     "babel-plugin-inline-dotenv": "^1.7.0",
     "expo": "~45.0.0",
+    "expo-application": "^4.1.0",
     "expo-auth-session": "^3.6.1",
     "expo-network": "^4.2.0",
     "expo-random": "^12.2.0",
