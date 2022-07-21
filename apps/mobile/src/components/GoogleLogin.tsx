@@ -1,64 +1,33 @@
-import { makeRedirectUri } from 'expo-auth-session';
-import * as Google from 'expo-auth-session/providers/google';
-import React, { useState } from 'react';
-import { Button, Text, View } from 'react-native';
-import { inferMutationInput, trpc } from '../utils/trpc';
+import { Dimensions, Text, TouchableOpacity } from 'react-native';
+import { useAuth } from '../hooks';
 
-type SignInInput = inferMutationInput<'expo-auth.signIn'>;
-export default function GoogleLogIn() {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [data, setData] = useState<any>();
-  const signIn = trpc.useMutation(['expo-auth.signIn']);
+export const GoogleLogIn = () => {
+  const {
+    googleSignIn: { canSignInGoogle, promptGoogleSignIn },
+  } = useAuth();
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    scopes: ['openid', 'profile', 'email'],
-    redirectUri: makeRedirectUri({
-      useProxy: true,
-    }),
-  });
-  React.useEffect(() => {
-    console.log(
-      '============================================================='
-    );
-    if (response?.type === 'success') {
-      async function some() {
-        const user = await signIn.mutateAsync(response as SignInInput);
-        setData(user);
-        if (user) {
-          setAuthenticated(true);
-        }
-      }
-      some();
-    }
-  }, [response]);
+  function signInGoogle() {
+    promptGoogleSignIn();
+  }
 
   return (
-    <>
-      {!authenticated && (
-        <Button
-          disabled={!request}
-          onPress={() => {
-            promptAsync({});
-          }}
-          title='Login with Google'
-        />
-      )}
-
-      {authenticated && (
-        <View>
-          <Text>
-            Successfully authenticated! Response: {JSON.stringify(data)}
-          </Text>
-          <Button
-            onPress={() => {
-              // Do somehthing
-            }}
-            title='Log out'
-          />
-        </View>
-      )}
-    </>
+    <TouchableOpacity
+      disabled={!canSignInGoogle}
+      onPress={signInGoogle}
+      style={{
+        borderWidth: 1,
+        borderColor: '#00000050',
+        borderRadius: 50,
+        width: Dimensions.get('screen').width - 24,
+        maxWidth: 350,
+        paddingVertical: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Text style={{ fontWeight: '600', fontSize: 17 }}>
+        Continue with Google
+      </Text>
+    </TouchableOpacity>
   );
-}
+};

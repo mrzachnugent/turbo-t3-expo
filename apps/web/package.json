@@ -24,7 +24,7 @@
     "zod": "^3.17.3",
     "api": "*",
     "ui-web": "*",
-    "react-trpc": "*"
+    "hooks": "*"
   },
   "devDependencies": {
     "@types/node": "18.0.0",

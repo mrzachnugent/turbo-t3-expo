@@ -1,1 +1,1 @@
-export * from 'react-trpc';
+export * from 'hooks/trpc';

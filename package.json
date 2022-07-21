@@ -6,10 +6,6 @@
     "packages": [
       "apps/*",
       "packages/*"
-    ],
-    "nohoist": [
-      "**/@types/react/**/*",
-      "**/@types/react-native/**/*"
     ]
   },
   "scripts": {

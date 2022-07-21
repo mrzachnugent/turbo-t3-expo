@@ -1,8 +1,4 @@
-const withTM = require('next-transpile-modules')([
-  'api',
-  'react-trpc',
-  'ui-web',
-]);
+const withTM = require('next-transpile-modules')(['api', 'hooks', 'ui-web']);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

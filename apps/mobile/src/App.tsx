@@ -1,3 +1,4 @@
+import './utils/ignore-warnings';
 import { FC } from 'react';
 import { Provider } from './components';
 import { LoginScreen } from './screens';

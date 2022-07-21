@@ -1,6 +1,6 @@
-# Turborepo starter
+# Turbo-t3-expo
 
-This is an official Yarn v1 starter turborepo.
+This is an example monorepo for create-t3-app and expo. If you want to create your own from scratch, make sure all of your react, react-dom, @types/react, and @types/react-dom are at the same version as the expo app in other apps.
 
 ## What's inside?
 
@@ -9,31 +9,36 @@ This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package ma
 ### Apps and Packages
 
 - `docs`: a [Next.js](https://nextjs.org) app
-- `web`: another [Next.js](https://nextjs.org) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
+- `web`: a [create-t3-app](https://github.com/t3-oss/create-t3-app) app
+- `api`: a shared library for all apps. Includes a prisma client, a trpc router, next-auth options, and expo-auth functionalities
+- `ui-web`: a stub React component library shared by both `web` and `docs` applications
 - `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
+- `prisma`: a `schema.prisma` file with optional `db.sqlite`
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+## Next-auth with Expo
 
-### Utilities
+This example app uses a lot of logic from Next-auth to implement the same/similar features for mobile. To make this possible, no cookies are used for authentication. Here's how it works:
 
-This turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+1. From the Expo app, a request is made and the response is verified.
+2. The Expo verfied response, is sent to a tRCP endpoint and verfied once again by the `.expo-auth` router.
+3. Once successful, a JWT token is generated, the user and account is updated accordingly, and the new JWT and user is sent to the Expo app.
 
 ## Setup
 
-This repository is used in the `npx create-turbo` command, and selected when choosing which package manager you wish to use with your monorepo (Yarn).
+This repository can be cloned from https://github.com/mrzachnugent/turbo-t3-expo.
+
+```
+git clone git@github.com:mrzachnugent/turbo-t3-expo.git
+cd turbo-t3-expo
+yarn
+```
 
 ### Build
 
-To build all apps and packages, run the following command:
+To build all apps and packages, run the following command in the root folder:
 
 ```
-cd my-turborepo
 yarn run build
 ```
 
@@ -42,7 +47,7 @@ yarn run build
 To develop all apps and packages, run the following command:
 
 ```
-cd my-turborepo
+cd turbo-t3-expo
 yarn run dev
 ```
 
