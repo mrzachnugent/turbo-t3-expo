@@ -78,7 +78,7 @@ const useGoogleAuth = () => {
     }
   }, [response]);
 
-  return { canSignInGoogle: !!request, promptGoogleSignIn: promptAsync };
+  return { isDisabled: !request, promptAsync };
 };
 
 const githubGiscovery = {

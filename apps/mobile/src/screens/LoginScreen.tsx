@@ -1,9 +1,12 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Button, Image, Text, View, ViewStyle } from 'react-native';
-import { GoogleLogIn } from '../components';
+import { LoginOptions } from '../components';
 import { useAuth } from '../hooks';
 import { useStore } from '../store';
 import { trpc } from '../utils/trpc';
+import NetInfo from '@react-native-community/netinfo';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const CENTER_CENTER: ViewStyle = {
   alignItems: 'center',
@@ -17,9 +20,26 @@ const ROOT: ViewStyle = {
 };
 
 export const LoginScreen: FC = () => {
-  const { session, loadingSession } = useStore();
+  const { bottom } = useSafeAreaInsets();
+  const {
+    session,
+    loadingSession,
+    hasInternetConnection,
+    setHasInternetConnection,
+  } = useStore();
   const hello = trpc.useQuery(['example.hello', { text: 'from tRPC' }]);
   const { signOut } = useAuth();
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setHasInternetConnection(Boolean(state.isConnected));
+      console.log('Connection type', state.type);
+      console.log('Is connected?', state.isConnected);
+    });
+
+    // To unsubscribe to these update, just use:
+    unsubscribe();
+  }, []);
 
   if (loadingSession)
     return (
@@ -31,12 +51,27 @@ export const LoginScreen: FC = () => {
   return (
     <View style={ROOT}>
       <View style={CENTER_CENTER}>
-        <Text style={{ fontSize: 27 }}>
-          {!hello.data ? 'Loading tRPC query' : hello.data.greeting}
+        <View style={{ height: 12 }} />
+        <MaterialCommunityIcons
+          name='application-brackets-outline'
+          size={72}
+          color='black'
+        />
+        <Text
+          style={{
+            fontSize: 27,
+            fontFamily: 'poppins700',
+          }}
+        >
+          Turbo-t3-expo
         </Text>
-        <View style={{ height: 18 }} />
+        <Text style={{ fontSize: 16 }}>
+          {!hello.data ? 'Loading tRPC query...' : hello.data.greeting}
+        </Text>
+
+        <View style={{ height: 32 }} />
         {!session ? (
-          <GoogleLogIn />
+          <LoginOptions />
         ) : (
           <View>
             <Text>Successfully authenticated!</Text>
@@ -60,6 +95,17 @@ export const LoginScreen: FC = () => {
           </View>
         )}
       </View>
+      <Text
+        style={{
+          fontSize: 14,
+          position: 'absolute',
+          bottom: bottom ? bottom : 4,
+        }}
+      >
+        {hasInternetConnection
+          ? 'You are connected to the internet'
+          : 'You are not connected to the internet'}
+      </Text>
     </View>
   );
 };
