@@ -3,4 +3,5 @@ export const ISS_GOOGLE_VALUES = [
   'https://accounts.google.com',
   'accounts.google.com',
 ];
+
 export const SECRET = process.env.NEXTAUTH_SECRET;

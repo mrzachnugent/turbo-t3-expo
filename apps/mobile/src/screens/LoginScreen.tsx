@@ -33,12 +33,11 @@ export const LoginScreen: FC = () => {
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       setHasInternetConnection(Boolean(state.isConnected));
-      console.log('Connection type', state.type);
-      console.log('Is connected?', state.isConnected);
     });
 
-    // To unsubscribe to these update, just use:
-    unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   if (loadingSession)

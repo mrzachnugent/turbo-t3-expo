@@ -7,7 +7,6 @@ declare global {
       GOOGLE_CLIENT_SECRET: string;
       SECURE_STORE_JWT_KEY: string;
       NEXT_API_URL: string;
-      IP_LOCAL_FOR_DEVICE: string;
     }
   }
 }

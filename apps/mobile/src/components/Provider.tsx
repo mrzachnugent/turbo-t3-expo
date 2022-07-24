@@ -14,7 +14,7 @@ export const Provider: FC = ({ children }) => {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
-      url: `${process.env.IP_LOCAL_FOR_DEVICE}/api/trpc`,
+      url: `${process.env.NEXT_API_URL}/api/trpc`,
       async headers() {
         if (token) {
           return {

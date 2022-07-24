@@ -19,9 +19,7 @@ export const expoAuthRouter = createRouter()
     }),
     async resolve({ input }) {
       try {
-        const result = await Providers[input.provider](input.response);
-        console.log({ result });
-        return result;
+        return await Providers[input.provider](input.response);
       } catch (err) {
         console.error(err);
       }
@@ -56,11 +54,6 @@ export const expoAuthRouter = createRouter()
     return next();
   })
   .query('getSession', {
-    resolve({ ctx }) {
-      return ctx.session;
-    },
-  })
-  .mutation('signOut', {
     resolve({ ctx }) {
       return ctx.session;
     },

@@ -10,27 +10,32 @@ import { useStore } from '../store';
 import { clearToken, saveJWT } from '../utils/secure-store';
 import { inferMutationInput, trpc } from '../utils/trpc';
 
+const redirectToExpoAppUri = makeRedirectUri({
+  useProxy: true,
+});
+
 type SignInResponseInput = inferMutationInput<'expo-auth.signIn'>['response'];
+type SignInProvider = inferMutationInput<'expo-auth.signIn'>['provider'];
 
 export const useAuth = () => {
   const { setSession, setToken, setLoadingSession } = useStore();
 
-  const utils = trpc.useContext();
   const googleSignIn = useGoogleAuth();
+  const githubSignIn = useGithubAuth();
+
+  const utils = trpc.useContext();
   trpc.useQuery(['expo-auth.getSession'], {
     onSuccess(data) {
       setSession(data);
     },
     onError(err) {
-      if (err.message === 'Missing token') {
-        console.log('No session');
-      }
       if (err.message === 'Token expired') {
         console.log(err);
         signOut();
       }
     },
   });
+
   async function signOut() {
     setLoadingSession(true);
     try {
@@ -47,6 +52,7 @@ export const useAuth = () => {
 
   return {
     googleSignIn,
+    githubSignIn,
     signOut,
   };
 };
@@ -57,9 +63,7 @@ const useGoogleAuth = () => {
     expoClientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     scopes: ['openid', 'profile', 'email'],
-    redirectUri: makeRedirectUri({
-      useProxy: true,
-    }),
+    redirectUri: redirectToExpoAppUri,
   });
 
   useEffect(() => {
@@ -74,41 +78,40 @@ const useGoogleAuth = () => {
     }
 
     if (response?.type === 'success') {
-      signIn(response);
+      signIn(response, 'google');
     }
   }, [response]);
 
-  return { isDisabled: !request, promptAsync };
+  return { isDisabled: !request, promptAsync: () => promptAsync() };
 };
 
-const githubGiscovery = {
+const GITHUB_DISCOVERY = {
   authorizationEndpoint: 'https://github.com/login/oauth/authorize',
   tokenEndpoint: 'https://github.com/login/oauth/access_token',
-  revocationEndpoint:
-    'https://github.com/settings/connections/applications/<CLIENT_ID>',
+  revocationEndpoint: `https://github.com/settings/connections/applications/${process.env.GITHUB_ID}`,
 };
 
-// @TODO: implement
 const useGithubAuth = () => {
   const { signIn } = useSignIn();
   const [request, response, promptAsync] = useAuthRequest(
     {
-      clientId: 'CLIENT_ID',
+      clientId: process.env.GITHUB_ID,
       scopes: ['read:user', 'user:email'],
-      redirectUri: makeRedirectUri({
-        scheme: 'your.app',
-      }),
+      redirectUri: redirectToExpoAppUri,
     },
-    githubGiscovery
+    GITHUB_DISCOVERY
   );
 
   useEffect(() => {
     if (response?.type === 'success') {
-      signIn(response);
+      signIn(response, 'github');
     }
   }, [response]);
 
-  return { canSignInGithub: !!request, promptGithubSignIn: promptAsync };
+  return {
+    isDisabled: !request,
+    promptAsync: () => promptAsync({ useProxy: true }),
+  };
 };
 
 const useSignIn = () => {
@@ -132,13 +135,13 @@ const useSignIn = () => {
     },
   });
 
-  async function signIn(response: AuthSessionResult) {
+  async function signIn(response: AuthSessionResult, provider: SignInProvider) {
     setLoadingSession(true);
     try {
       console.log({ response });
       const result = await signInMutation.mutateAsync({
         response: response as SignInResponseInput,
-        provider: 'google',
+        provider,
       });
       if (!result?.jwt) {
         Alert.alert('ERROR', 'Unable to login at this time.');

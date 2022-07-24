@@ -12,25 +12,19 @@ import { FC } from 'react';
 import * as Haptics from 'expo-haptics';
 
 export const LoginOptions = () => {
-  const { googleSignIn } = useAuth();
-
-  function signInGoogle() {
-    googleSignIn.promptAsync();
-  }
+  const { googleSignIn, githubSignIn } = useAuth();
 
   return (
     <>
       <OAuthLoginButton
-        onPress={signInGoogle}
+        onPress={googleSignIn.promptAsync}
         disabled={googleSignIn.isDisabled}
         provider='google'
       />
       <View style={{ height: 12 }} />
       <OAuthLoginButton
-        onPress={() => {
-          console.log('TODO');
-        }}
-        disabled={true}
+        onPress={githubSignIn.promptAsync}
+        disabled={githubSignIn.isDisabled}
         provider='github'
       />
       <View style={{ height: 12 }} />
