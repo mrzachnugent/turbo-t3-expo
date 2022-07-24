@@ -2,6 +2,7 @@ import { signInWithGoogle } from './google-auth';
 import { NextAuthProviderIds } from '../next-auth';
 import { signInWithGithub } from './github-auth';
 import { AuthResponse } from './zod';
+import { signInWithApple } from './apple-auth';
 
 export const Providers: Record<
   typeof NextAuthProviderIds[number],
@@ -9,6 +10,7 @@ export const Providers: Record<
 > = {
   google: signInWithGoogle,
   github: signInWithGithub,
+  apple: signInWithApple,
 };
 
 export * from './prisma-auth';

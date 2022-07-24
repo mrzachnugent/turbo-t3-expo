@@ -1,3 +1,4 @@
+import * as AppleAuthentication from 'expo-apple-authentication';
 import {
   AuthSessionResult,
   makeRedirectUri,
@@ -22,6 +23,7 @@ export const useAuth = () => {
 
   const googleSignIn = useGoogleAuth();
   const githubSignIn = useGithubAuth();
+  const appleSignIn = useAppleAuth();
 
   const utils = trpc.useContext();
   trpc.useQuery(['expo-auth.getSession'], {
@@ -53,6 +55,7 @@ export const useAuth = () => {
   return {
     googleSignIn,
     githubSignIn,
+    appleSignIn,
     signOut,
   };
 };
@@ -114,6 +117,55 @@ const useGithubAuth = () => {
   };
 };
 
+const useAppleAuth = () => {
+  const { signIn } = useSignIn();
+
+  async function promptAsync() {
+    try {
+      // type AppleAuthenticationCredential
+      const credential: AppleAuthenticationCredential =
+        await AppleAuthentication.signInAsync({
+          requestedScopes: [
+            AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+            AppleAuthentication.AppleAuthenticationScope.EMAIL,
+          ],
+        });
+
+      signIn(
+        {
+          type: 'success',
+          authentication: { accessToken: credential.authorizationCode },
+          params: credential,
+        },
+        'apple'
+      );
+    } catch (err) {
+      console.log('useAppleAuth', err);
+    }
+  }
+
+  return {
+    isDisabled: false,
+    promptAsync,
+  };
+};
+
+type AppleAuthenticationCredential = {
+  user: string;
+  state: string | null;
+  fullName: AppleAuthentication.AppleAuthenticationFullName | null;
+  email: string | null;
+  realUserStatus: AppleAuthentication.AppleAuthenticationUserDetectionStatus;
+  identityToken: string | null;
+  authorizationCode: string | null;
+};
+
+interface AppleAuthSessionResult {
+  type: 'success' | 'error';
+  authentication: { accessToken: string | null };
+  params: AppleAuthentication.AppleAuthenticationCredential;
+}
+
 const useSignIn = () => {
   const { setLoadingSession, setSession, setToken } = useStore();
 
@@ -135,10 +187,12 @@ const useSignIn = () => {
     },
   });
 
-  async function signIn(response: AuthSessionResult, provider: SignInProvider) {
+  async function signIn(
+    response: AuthSessionResult | AppleAuthSessionResult,
+    provider: SignInProvider
+  ) {
     setLoadingSession(true);
     try {
-      console.log({ response });
       const result = await signInMutation.mutateAsync({
         response: response as SignInResponseInput,
         provider,
