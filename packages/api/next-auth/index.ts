@@ -2,6 +2,7 @@ import { type NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import AppleProvider from 'next-auth/providers/apple';
+import EmailProvider from 'next-auth/providers/email';
 
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '../db';
@@ -14,6 +15,20 @@ const providers = [
   GoogleProvider({
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  }),
+  EmailProvider({
+    server: {
+      host: 'smtp.gmail.com',
+      port: 465,
+      auth: {
+        type: 'OAuth2',
+        user: process.env.EMAIL_SERVER_USER,
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        refreshToken: process.env.EMAIL_SERVER_REFRESH_TOKEN,
+      },
+    },
+    from: process.env.EMAIL_SERVER_USER,
   }),
   AppleProvider({
     // @TODO

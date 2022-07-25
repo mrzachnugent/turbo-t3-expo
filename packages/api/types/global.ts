@@ -22,6 +22,8 @@ declare global {
       PORT?: string;
       BASE_URL: string;
       NEXTAUTH_SECRET: string;
+      EMAIL_SERVER_USER: string;
+      EMAIL_SERVER_REFRESH_TOKEN: string;
     }
   }
 }
